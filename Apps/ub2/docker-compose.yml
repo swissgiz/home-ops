@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  easy:
+    stdin_open: true # So that the serving is not exited with code 0
+    container_name: easy
+    image: yooooomi/easy-countdown
+    environment:
+      TIMER_BACKGROUND: https://v7n2u8v7.rocketcdn.me/wp-content/uploads/2019/05/238-TrI%E2%80%93MAIN.jpg
+      TIMER_TARGET: "Jul 11 2024 00:00:00 GMT+0200"
+      TIMER_TITLE: "Bientot la retraite !"
+    networks:
+      - stack
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+networks:
+  stack:
+    external: true

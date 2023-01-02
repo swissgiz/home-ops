@@ -1,0 +1,47 @@
+---
+version: "2.1"
+services:
+  nextcloud:
+    image: ghcr.io/linuxserver/nextcloud
+    container_name: nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - /home/ansible/nextcloud/config:/config
+      - /media/nextcloud/data:/data
+    ports:
+      - 443:443
+    restart: unless-stopped
+  mariadb:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: mariadb-nextcloud
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_ROOT_PASSWORD=""
+      - TZ=Europe/Zurich
+      - MYSQL_DATABASE=""
+      - MYSQL_USER=""
+      - MYSQL_PASSWORD=""
+    volumes:
+      - /home/ansible/mysql/config:/config
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+     - /home/ansible/redis/config:/usr/local/etc/redis
+    sysctls:
+     - net.core.somaxconn=1024
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+
+#TODO:
+#nextcloud depends on mariadb
+#

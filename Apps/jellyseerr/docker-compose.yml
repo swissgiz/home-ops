@@ -1,0 +1,18 @@
+---
+version: '3'
+services:
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - TZ=Europe/Paris
+      - LOG_LEVEL=debug
+    ports:
+      - 5055:5055
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "3"
+    volumes:
+      - /home/ansible/jellyseerr/config:/app/config
+    restart: unless-stopped

@@ -1,0 +1,37 @@
+---
+version: "2"
+services:
+  letsencrypt:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DOCKER_MODS=linuxserver/mods:swag-maxmind
+      - MAXMINDDB_LICENSE_KEY=""
+      - TZ=Europe/Paris
+      - URL=guismo.fr
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - DNSPLUGIN=gandi
+      - EMAIL=giz.richard@gmail.com
+      - DHLEVEL=2048
+      - STAGING=false
+    volumes:
+      - /home/pi/swag/config:/config
+    ports:
+      - 443:443
+      - 80:80
+      - 8448:8448
+    restart: unless-stopped
+  authelia:
+    image: authelia/authelia:4.37.4 #4.33.1
+    container_name: authelia
+    environment:
+      - TZ=Europe/Paris
+    volumes:
+      - /home/pi/swag/authelia_config:/config
+    restart: unless-stoppe
+

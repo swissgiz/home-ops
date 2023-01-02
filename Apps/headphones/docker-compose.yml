@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  headphones:
+    image: lscr.io/linuxserver/headphones
+    container_name: headphones
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - /home/ansible/headphones/config:/config
+      - /media/Musique:/music
+      - /media/downloads:/downloads
+    ports:
+      - 8181:8181
+    restart: unless-stopped
