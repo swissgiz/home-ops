@@ -1,0 +1,17 @@
+---
+version: "2.1"
+services:
+  affine:
+    image: ghcr.io/toeverything/affine:nightly-latest
+    container_name: affine
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+#classique
+      - /home/ansible/affine/config:/config
+    ports:
+      - 4200:3000
+    restart: unless-stopped
+

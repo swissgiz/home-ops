@@ -1,0 +1,19 @@
+---
+version: "2.1"
+services:
+  dokuwiki:
+    image: lscr.io/linuxserver/dokuwiki:latest
+    container_name: dokuwiki
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+#classique
+      - /home/ansible/dokuwiki/config:/config
+#via glusterfs
+#      - /media/config/dokuwiki/config:/config
+    ports:
+      - 9280:80
+    restart: unless-stopped
+

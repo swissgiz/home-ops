@@ -1,0 +1,48 @@
+---
+version: '3.3'
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Europe/Paris
+      - SYNAPSE_SERVER_NAME=guismo.fr
+      - SYNAPSE_REPORT_STATS=yes
+    volumes:
+      - /home/ansible/synapse/config:/data
+    ports:
+      - 8008:8008
+      - 8448:8448
+    logging:
+      options:
+        max-size: "4m"
+        max-file: "3"
+    restart: unless-stopped
+  postgresql:
+    image: registry.hub.docker.com/library/postgres:14
+    container_name: postgres-synapse
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Europe/Zurich
+      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
+      - POSTGRES_USER=synapse
+      - POSTGRES_DB=synapse
+    volumes:
+      - /home/ansible/postgresql/config:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+  redis:
+    image: redis:latest
+    container_name: redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+     - /home/ansible/redis/config:/usr/local/etc/redis
+    sysctls:
+     - net.core.somaxconn=1024
+    ports:
+      - 6379:6379
+    restart: unless-stopped

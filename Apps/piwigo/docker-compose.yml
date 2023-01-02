@@ -1,0 +1,43 @@
+---
+version: "2.1"
+services:
+  piwigo:
+    image: lscr.io/linuxserver/piwigo:latest
+    container_name: piwigo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Zurich
+    volumes:
+      - /home/ubuntu/piwigo/config:/config
+      - /home/ubuntu/piwigo/gallery:/gallery
+    ports:
+      - 8082:80
+#      - 80:80
+    restart: unless-stopped
+    networks:
+      - stack
+#      - piwigo
+    depends_on:
+      - piwigo-db
+  piwigo-db:
+    image: lscr.io/linuxserver/mariadb
+    container_name: piwigo-db
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MYSQL_DATABASE=piwigo
+      - MYSQL_USER=piwigo
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - TZ=Europe/Zurich
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    networks:
+      - stack
+
+networks:
+  stack:
+    external: true
+

@@ -1,0 +1,31 @@
+---
+version: "2"
+services:
+  letsencrypt:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+      - URL=""
+      - SUBDOMAINS=wildcard
+      - VALIDATION=dns
+      - DNSPLUGIN=gandi
+      - EMAIL=""
+      - DHLEVEL=2048
+      - STAGING=false
+    volumes:
+      - /home/ubuntu/swag/config:/config
+    networks:
+      - stack
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+
+networks:
+  stack:
+    external: true
